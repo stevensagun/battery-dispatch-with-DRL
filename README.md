@@ -16,5 +16,6 @@ Published at the Journal of Energy Storage: https://doi.org/10.1016/j.est.2025.1
       * Preprint: https://arxiv.org/abs/2410.20005
       * Repository: https://github.com/masa2203/battery_arbitrage_with_drl
     * Joint dispatch of gas turbines and batteries with RL:
+      * Paper: https://doi.org/10.1016/j.egyai.2025.100653
       * Preprint: https://dx.doi.org/10.2139/ssrn.5117155
       * Repository: https://github.com/masa2203/joint_bes_gt_dispatch
