@@ -27,7 +27,7 @@ ENV_KWARGS['state_vars'] = ['pool_price', 'cos_h', 'sin_h', 'cos_w', 'sin_w', 'c
 CREATE_LOG = False
 VERBOSE = 0
 LOGGER_TYPE = ["csv", "tensorboard"]
-SAVE_PATH = os.path.join('../log/', ENV_KWARGS['env_name'], 'sac/run', input('Save in folder: ')) \
+SAVE_PATH = os.path.join('log/', ENV_KWARGS['env_name'], 'sac/run', input('Save in folder: ')) \
     if CREATE_LOG else None
 
 # EXP PARAMS

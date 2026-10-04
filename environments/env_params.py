@@ -13,7 +13,7 @@ dod_degr = {
 # PLANT - ALBERTA - ENERGY ARBITRAGE - 2022
 al4_bat_ea = {
     'env_name': 'al4_bat_ea',  # used for saving path
-    'data_file': '../data/alberta3/alberta_2022_electricity_final.csv',
+    'data_file': 'data/alberta3/alberta_2022_electricity_final.csv',
     'state_vars': ['pool_price'],  # list of data columns to serve as state var
     'e_price_fix_fee': 10.0,  # CAD per MWh, added to electricity price
     'storage': dict(total_cap=10,  # MWh
@@ -35,8 +35,8 @@ al4_bat_ea = {
 # PLANT - GERMANY - HES - 2022
 de1_bat_hes = {
     'env_name': 'de1_bat_hes',  # used for saving path
-    'data_file': '../data/germany1/54.2000_8.9000_all_data.csv',
-    'demand_file': '../data/germany1/ind_demand_shift.csv',
+    'data_file': 'data/germany1/54.2000_8.9000_all_data.csv',
+    'demand_file': 'data/germany1/ind_demand_shift.csv',
     'state_vars': ['pool_price', 're_power'],  # list of data columns to serve as state var
     'sell_surplus': False,
     'e_price_fix_fee': 10.0,  # CAD per MWh, added to electricity price

@@ -13,23 +13,23 @@ from train.train import train_rl_agent
 # CHOOSE ENVIRONMENT/CASE STUDY
 # -----------------------------------------------------------------
 # AB-EA
-# ENV = EA_BESS
-# ENV_KWARGS = al4_bat_ea
-# DISCRETE_ACTIONS = [np.array([-1]), np.array([0]), np.array([1])]
-# ENV_KWARGS['state_vars'] = ['pool_price', 'cos_h', 'sin_h', 'cos_w', 'sin_w', 'cos_m', 'sin_m']
+ENV = EA_BESS
+ENV_KWARGS = al4_bat_ea
+DISCRETE_ACTIONS = [np.array([-1]), np.array([0]), np.array([1])]
+ENV_KWARGS['state_vars'] = ['pool_price', 'cos_h', 'sin_h', 'cos_w', 'sin_w', 'cos_m', 'sin_m']
 
 # DE-LF/REU
-ENV = HES_BESS_Env1
-ENV_KWARGS = de1_bat_hes
-DISCRETE_ACTIONS = [np.array([i]) for i in np.linspace(-1, 1, 17)]
-ENV_KWARGS['state_vars'] = ['pool_price', 're_power', 'cos_h', 'sin_h', 'cos_w', 'sin_w', 'cos_m', 'sin_m']
+# ENV = HES_BESS_Env1
+# ENV_KWARGS = de1_bat_hes
+# DISCRETE_ACTIONS = [np.array([i]) for i in np.linspace(-1, 1, 17)]
+# ENV_KWARGS['state_vars'] = ['pool_price', 're_power', 'cos_h', 'sin_h', 'cos_w', 'sin_w', 'cos_m', 'sin_m']
 # -----------------------------------------------------------------
 
 # LOG
 CREATE_LOG = False
 VERBOSE = 0
 LOGGER_TYPE = ["csv", "tensorboard"]
-SAVE_PATH = os.path.join('../log/', ENV_KWARGS['env_name'], 'dqn/run', input('Save in folder: ')) \
+SAVE_PATH = os.path.join('log/', ENV_KWARGS['env_name'], 'dqn/run', input('Save in folder: ')) \
     if CREATE_LOG else None
 
 # EXP PARAMS
