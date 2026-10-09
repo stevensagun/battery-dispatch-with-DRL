@@ -58,6 +58,7 @@ def train_rl_agent(
                    seed=seed,
                    inactive_penalty=exp_params['inactive_penalty'],
                    action_corr_penalty=exp_params['action_corr_penalty'],
+                   soc_penalty=exp_params['soc_penalty'],
                    flatten_obs=exp_params['flatten_obs'],
                    discrete_actions=discrete_actions,
                    frame_stack=exp_params['frame_stack'],
