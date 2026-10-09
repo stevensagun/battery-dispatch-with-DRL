@@ -19,7 +19,7 @@ DISCRETE_ACTIONS = None
 ENV_KWARGS['state_vars'] = ['pool_price', 'cos_h', 'sin_h', 'cos_w', 'sin_w', 'cos_m', 'sin_m']
 
 # LOG
-CREATE_LOG = False
+CREATE_LOG = True
 VERBOSE = 0
 LOGGER_TYPE = ["csv", "tensorboard"]
 SAVE_PATH = os.path.join('log/', ENV_KWARGS['env_name'], 'ppo/run', input('Save in folder: ')) \
