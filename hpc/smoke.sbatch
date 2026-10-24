@@ -9,11 +9,19 @@
 #SBATCH --mem=4G
 #SBATCH --output=hpc/out/%x.%j.out
 
-# Short check: 1 seed x 1 episode per algorithm, logged to log/de1_bat_hes/<algo>/run/smoke_<partition>.
+# Short check: 1 seed x 1 episode per algorithm, logged to log/<env_name>/<algo>/run/smoke_<partition>.
+# Task is delf (DE-LF/REU) or abea (AB-EA); algorithms default to all four.
 # Submit from the repo root:
-#   CPU: sbatch hpc/smoke.sbatch
-#   GPU: sbatch --partition=course_gpu --gres=gpu:a100_10g:1 --job-name=smoke_gpu hpc/smoke.sbatch dqn sac
+#   CPU: sbatch hpc/smoke.sbatch abea
+#   GPU: sbatch --partition=course_gpu --gres=gpu:a100_10g:1 --job-name=smoke_gpu hpc/smoke.sbatch abea dqn sac
 set -eo pipefail
+
+TASK=$1
+shift
+ALGOS=("$@")
+if [ ${#ALGOS[@]} -eq 0 ]; then
+    ALGOS=(dqn ppo sac ddpg)
+fi
 
 module purge > /dev/null 2>&1
 module load wulver
@@ -23,15 +31,10 @@ conda activate /course/2026/fall/cs/669/tn294/ab3367/envs/rl39
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 export N_RUNS=1 N_EPISODES=1
 
-ALGOS=("$@")
-if [ ${#ALGOS[@]} -eq 0 ]; then
-    ALGOS=(dqn ppo sac)
-fi
-
 echo "node $(hostname) | partition $SLURM_JOB_PARTITION | cpus $SLURM_CPUS_PER_TASK"
 python -c "import torch; print('cuda available:', torch.cuda.is_available())"
 
 for algo in "${ALGOS[@]}"; do
-    echo "== $algo"
-    echo "smoke_$SLURM_JOB_PARTITION" | python -m main.run_${algo}_delf
+    echo "== $TASK $algo"
+    echo "smoke_$SLURM_JOB_PARTITION" | python -m main.run_${algo}_${TASK}
 done

@@ -7,6 +7,7 @@ from environments.env_params import *
 from utils.net_design import activation_fn_dict, net_arch_dict
 from utils.scheduler import linear_schedule
 from utils.utils import create_stats_file
+from utils.variants import apply_variant
 from train.train import train_rl_agent
 
 
@@ -34,8 +35,8 @@ SAVE_PATH = os.path.join('log/', ENV_KWARGS['env_name'], 'dqn/run', input('Save 
 
 # EXP PARAMS
 EXP_PARAMS = {
-    'n_runs': 5,
-    'n_episodes': 50,
+    'n_runs': int(os.environ.get('N_RUNS', 5)),
+    'n_episodes': int(os.environ.get('N_EPISODES', 50)),
     'seed': 22,
     # Reward wrapper
     'inactive_penalty': None,
@@ -52,6 +53,10 @@ EXP_PARAMS = {
     'eval_while_training': True,
     'eval_freq': 8760 * 1,
 }
+
+# Design-choice experiments: VARIANT=basic, time_sincos, stack4, ... (see utils/variants.py).
+# Without VARIANT the settings above are used.
+DISCRETE_ACTIONS = apply_variant(ENV_KWARGS, EXP_PARAMS, DISCRETE_ACTIONS)
 
 # DQN PARAMS
 RL_PARAMS: dict[str, Any] = {
@@ -91,7 +96,10 @@ if SAVE_PATH is not None:
 RL_PARAMS['policy_kwargs']['net_arch'] = net_arch_dict[RL_PARAMS['policy_kwargs']['net_arch']]['qf']
 RL_PARAMS['policy_kwargs']['activation_fn'] = activation_fn_dict[RL_PARAMS['policy_kwargs']['activation_fn']]
 
-for run in range(EXP_PARAMS['n_runs']):
+# RUN set: train only that seed (one Slurm array task per seed)
+RUNS = [int(os.environ['RUN'])] if 'RUN' in os.environ else range(EXP_PARAMS['n_runs'])
+
+for run in RUNS:
     train_rl_agent(
         agent='dqn',
         run=run,
@@ -106,6 +114,6 @@ for run in range(EXP_PARAMS['n_runs']):
     )
 
 # GET STATISTICS FROM MULTIPLE RUNS
-if CREATE_LOG and EXP_PARAMS['n_runs'] > 1:
+if CREATE_LOG and EXP_PARAMS['n_runs'] > 1 and 'RUN' not in os.environ:
     create_stats_file(SAVE_PATH, EXP_PARAMS)
 
