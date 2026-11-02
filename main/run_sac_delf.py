@@ -7,6 +7,7 @@ from environments.env_params import *
 from utils.net_design import activation_fn_dict, net_arch_dict
 from utils.scheduler import linear_schedule
 from utils.utils import create_stats_file
+from utils.variants import apply_variant
 from train.train import train_rl_agent
 
 
@@ -35,7 +36,7 @@ EXP_PARAMS = {
     'soc_penalty': 200,
     # Env
     'flatten_obs': True,
-    'frame_stack': 4,
+    'frame_stack': 2,  # Paper (Sec. 5.3): SAC on DE-LF/REU worked best with 2 stacked observations
     # Normalization
     'norm_obs': True,
     'norm_reward': True,
@@ -43,6 +44,10 @@ EXP_PARAMS = {
     'eval_while_training': True,
     'eval_freq': 8760 * 1,
 }
+
+# Design-choice experiments: VARIANT=basic, time_sincos, stack4, ... (see utils/variants.py).
+# Without VARIANT the settings above are used.
+apply_variant(ENV_KWARGS, EXP_PARAMS, None)
 
 # SAC PARAMS
 RL_PARAMS: dict[str, Any] = {

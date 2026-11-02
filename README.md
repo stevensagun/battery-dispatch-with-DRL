@@ -52,7 +52,14 @@ python -m main.run_dqn
 
 # Running on Wulver (NJIT HPC)
 
-The `hpc/` folder has everything needed to run the DE-LF experiments (DQN, PPO and SAC, 5 seeds x 50 episodes each) on Wulver. All 15 runs train at the same time: PPO on CPU, DQN and SAC on A100 GPU slices. The whole experiment takes about 2-3 hours.
+The `hpc/` folder has everything needed to run both case studies on Wulver with all four algorithms (DQN, PPO, SAC and DDPG, 5 seeds x 50 episodes each):
+
+- `delf`: DE-LF/REU (Germany, load following)
+- `abea`: AB-EA (Alberta, energy arbitrage)
+
+All runs for a task train at the same time: PPO on CPU, DQN, SAC and DDPG on A100 GPU slices. A full task takes about 2-3 hours.
+
+The paper doesn't report tuned DDPG hyperparameters (it drops DDPG after the basic experiments). The original settings in `run_ddpg.py` have no exploration noise and only 5 gradient updates per episode, so `run_ddpg_delf.py` and `run_ddpg_abea.py` instead reuse the tuned SAC setup for each task and add Gaussian exploration noise.
 
 ### 1. Log in
 
@@ -91,13 +98,21 @@ This takes about 6 minutes. It installs Python 3.9 with gym 0.21, stable-baselin
 Runs each algorithm for one episode to make sure everything works:
 
 ```bash
-sbatch hpc/smoke.sbatch
+sbatch hpc/smoke.sbatch delf
 ```
 
 ### 5. Start the experiment
 
+Pick the task (`delf` or `abea`):
+
 ```bash
-bash hpc/submit_all.sh
+bash hpc/submit_all.sh delf
+```
+
+This runs all four algorithms. To run only some of them, list them after the task:
+
+```bash
+bash hpc/submit_all.sh delf ddpg
 ```
 
 ### 6. Check progress
@@ -112,7 +127,13 @@ Never run training directly on the login node; always submit it with `sbatch` (t
 
 ### 7. Results
 
-Each run is saved in `log/de1_bat_hes/<algo>/run/full/run_<seed>/`. When all 15 runs are done, a stats job writes `stats.csv` and `eval_stats.csv` for each algorithm.
+Each run is saved in `log/<case study>/<algo>/run/full/run_<seed>/`, where the case study folder is `de1_bat_hes` (DE-LF) or `al4_bat_ea` (AB-EA). When all runs for a task are done, a stats job writes `stats.csv` and `eval_stats.csv` for each algorithm.
+
+To print a results table in the same format as the paper (average reward over the last 5 training episodes, mean ± std across seeds, in thousand C$):
+
+```bash
+python -m main.summarize_results delf
+```
 
 To copy the results to your laptop, run this on your laptop:
 
