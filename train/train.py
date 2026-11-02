@@ -8,6 +8,7 @@ from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.logger import configure
 
+from agents.transformer import TransformerDQN
 from utils.callbacks import ProgressBarManager
 from utils.make_env import make_env
 from utils.utils import get_env_log_data
@@ -18,6 +19,7 @@ AGENTS = {
     'sac': SAC,
     'a2c': A2C,
     'dqn': DQN,
+    'transformer': TransformerDQN,
     'ddpg': DDPG,
 }
 
